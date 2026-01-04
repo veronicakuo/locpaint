@@ -11,9 +11,7 @@ Thank you to Professor Olga Russakovsky and Professor Vikram Ramaswamy for their
 
 ### Key Intuition
 
-To my knowledge, all previous GAN inpainting approaches leverage a **binary classifier** which classifies generator outputs as "real" or "fake." Yet image inpainting lends itself well to discriminators that are **localizers**:
-
-> *If someone thinks an inpainted image looks "fake," they should be able to identify **where** the "fake" region is.*
+To my knowledge, all previous GAN inpainting approaches leverage a **binary classifier** which classifies generator outputs as "real" or "fake." Yet image inpainting lends itself well to discriminators that are **localizers**: if someone thinks an inpainted image looks "fake," they should be able to identify **where** the "fake" region is.
 
 ### Why localization?
 
@@ -39,30 +37,6 @@ Building on [Pathak et al. (2016)](https://arxiv.org/abs/1604.07379), I implemen
 - **Phased Training**: Staged approach that transitions from binary to localizer discriminator
 - **Comprehensive Evaluation**: MSE, PSNR, SSIM, and LPIPS metrics
 - **Reproducible Splits**: Fixed train/val/test splits with configurable seeds
-
-## Architecture
-
-### Generator (Encoder-Decoder)
-
-```
-Input (128×128×3) → Encoder → Latent (4000-dim) → Decoder → Output (128×128×3)
-```
-
-### Discriminator Comparison
-
-| Component | Pathak et al. (Binary) | Ours (Localizer) |
-|-----------|------------------------|------------------|
-| Input | 64×64 cropped patch | 128×128 full image |
-| Output | Single scalar P(real) | Confidence + BBox |
-| Feedback | "Image is fake" | "Fake region is HERE" |
-
-### Localizer Discriminator Heads
-
-| Component | Detection Head | Localization Head |
-|-----------|----------------|-------------------|
-| Purpose | Confidence score | Bounding box regression |
-| Dimensions | 8192 → 256 → 1 | 8192 → 256 → 4 |
-| Output | P(fake) ∈ [0, 1] | [x₁, y₁, x₂, y₂] ∈ [0, 1]⁴ |
 
 ## Quick Start (Google Colab)
 
