@@ -1,4 +1,4 @@
-# LocPaint: Context Encoder with Localizer Discriminator
+# LocPaint: Localization-Guided Adversarial Inpainting
 
 A PyTorch implementation of GAN-based image inpainting algorithm with a novel **localizer discriminator** paradigm. I have written a report for more context [here](https://drive.google.com/file/d/1tKQ0nT-1N6a2r1LytKhrtLatNP27wnIs/view?usp=sharing).
 Thank you to Professor Olga Russakovsky and Professor Vikram Ramaswamy for their support and guidance to this project!
