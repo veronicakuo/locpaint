@@ -122,7 +122,7 @@ locpaint/
     --checkpoint_dir ./baseline/checkpoints_pathak
 ```
 
-### 3. Localizer (Ours)
+### 3. Localizer (proposed)
 
 ```bash
 !python localizer/train_localizer.py \
@@ -141,7 +141,7 @@ locpaint/
     --checkpoint_dir ./localizer/checkpoints
 ```
 
-### 4. Phased Localizer (Ours)
+### 4. Phased Localizer (proposed)
 
 ```bash
 !python staged/train_staged.py \
@@ -209,53 +209,6 @@ Test what the discriminator is detecting (boundaries vs. content/texture):
     --model_type staged \
     --output_dir ./diagnostic_staged
 ```
-
-**Diagnostic Tests:**
-| Test | Description | What High IoU Means |
-|------|-------------|---------------------|
-| Real images | Unmodified images | D falsely detecting regions |
-| Gaussian blur | Blurred region, NO boundary | D detecting texture, not boundary |
-| Noise regions | Noisy region, NO boundary | D detecting noise artifacts |
-| Mean color | Uniform patch, NO boundary | D detecting color mismatch |
-| Completed | Inpainted with boundary | D detecting boundary (expected) |
-| Fully reconstructed | Entire image through G | D detecting generator artifacts |
-
-## Loss Functions
-
-### Discriminator Loss
-
-```
-L_D = L_real_conf + L_fake_conf + λ_loc × L_fake_loc + λ_iou × L_fake_iou
-```
-
-| Term | Formula | Purpose |
-|------|---------|---------|
-| L_real_conf | BCE(D_conf(x_real), 0) | Real images → low confidence |
-| L_fake_conf | BCE(D_conf(x_fake), 1) | Fake images → high confidence |
-| L_fake_loc | SmoothL1(bbox_pred, bbox_true) | Accurate bbox prediction |
-| L_fake_iou | 1 - IoU(bbox_pred, bbox_true) | Maximize bbox overlap |
-
-### Generator Loss
-
-```
-L_G = λ_rec × L_rec + λ_conf × L_conf + λ_loc × L_loc + λ_iou × L_iou
-```
-
-| Term | Formula | Purpose |
-|------|---------|---------|
-| L_rec | MSE(x, x̂) | Reconstruction quality |
-| L_conf | BCE(D_conf(x̂), 0) | Fool D (low confidence) |
-| L_loc | -SmoothL1(bbox_pred, bbox_true) | Maximize D's bbox error |
-| L_iou | IoU(bbox_pred, bbox_true) | Penalize when D finds region |
-
-## Metrics
-
-| Metric | Measures | Range | Better |
-|--------|----------|-------|--------|
-| **MSE** | Pixel error | [0, ∞) | Lower ↓ |
-| **PSNR** | Log pixel error (dB) | [0, ∞) | Higher ↑ |
-| **SSIM** | Structural similarity | [0, 1] | Higher ↑ |
-| **LPIPS** | Perceptual distance (AlexNet) | [0, 1] | Lower ↓ |
 
 ## Checkpoints
 
